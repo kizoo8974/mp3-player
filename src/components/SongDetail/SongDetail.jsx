@@ -1,12 +1,15 @@
 import React from 'react';
 import './SongDetail.scss';
 import img1 from '../../images/music-1.jpg';
-function SongDetail() {
+import { useSelector } from 'react-redux';
 
+function SongDetail() {
+  const playing =  useSelector((state)=> state.playing);
+  
   return (
     <>
       <div className="header">
-        <span>{true ? 'Now Playing' : 'Not Playing'}</span>
+        <span>{playing ? 'Now Playing' : 'Not Playing'}</span>
       </div>
       <div className="img-area">
         <img
@@ -15,8 +18,8 @@ function SongDetail() {
         />
       </div>
       <div className="music-info">
-        <p className="song">음악제목</p>
-        <p className="artist">아티스트</p>
+        <p className="song">Song</p>
+        <p className="artist">Artist</p>
       </div>
     </>
   );
