@@ -1,13 +1,16 @@
 import React, {useRef, useImperativeHandle, forwardRef, useState } from "react";
 import "./ProgressArea.scss";
-import music1 from "../../music/music-1.mp3";
+
 import { useDispatch } from "react-redux";
-import { playMusic, stopMusic } from "../../store/musicPlayerReducer";
+import { nextMusic, playMusic, stopMusic } from "../../store/musicPlayerReducer";
+import { useSelector } from "react-redux";
+import { shallowEqual } from "react-redux";
 
 function ProgressArea(props, ref) {
   const audio = useRef()
   const progressBar = useRef()
   const dispatch = useDispatch()
+  const {playList, currentIndex} = useSelector(state => ({playList:state.playList, currentIndex:state.currentIndex}), shallowEqual)
   const [currentTime, setcurrentTime] = useState("00:00")
   const [duration, setduration] = useState("00:00")
 
@@ -54,13 +57,18 @@ function ProgressArea(props, ref) {
     dispatch(stopMusic())
   }
 
+  const onEnded = ()=>{
+    dispatch(nextMusic())
+  }
+
   return (
     <div className="progress-area" onMouseDown={onClickProgress}>
       <div className="progress-bar" ref={progressBar}>
         <audio
           autoPlay
+          onEnded={onEnded}
           ref={audio}
-          src={music1}
+          src={playList[currentIndex].src}
           onPlay={onPlay}
           onPause={onPause}
           onTimeUpdate={onTimeUpdate}

@@ -57,9 +57,13 @@ import music5 from '../music/music-5.mp3';
 
   const PLAY_MUSIC = "musicPlayer/PLAY_MUSIC";
   const STOP_MUSIC = "musicPlayer/STOP_MUSIC";
+  const NEXT_MUSIC = "musicPlayer/NEXT_MUSIC";
+  const PREV_MUSIC = "musicPlayer/PREV_MUSIC";
 
   export const playMusic = () => ({type:PLAY_MUSIC})
   export const stopMusic = () => ({type:STOP_MUSIC})
+  export const nextMusic = () => ({type: NEXT_MUSIC})
+  export const prevMusic = () => ({type: PREV_MUSIC})
 
   export default function musicPlayerReducer(state = initialState, action){
     switch(action.type){
@@ -72,7 +76,23 @@ import music5 from '../music/music-5.mp3';
                 return {
                     ...state,
                     playing: false,
-                };
+                }
+            case NEXT_MUSIC:
+              const nextIndex = (state.currentIndex+1) % state.playList.length
+              return{
+                ...state,
+                currentIndex:nextIndex,
+                currentMusicId: state.playList[nextIndex].id
+              }
+            case PREV_MUSIC:
+              const prevIndex = (state.currentIndex-1 + state.playList.length) % state.playList.length
+              return{
+                ...state,
+                currentIndex:prevIndex,
+                currentMusicId: state.playList[prevIndex].id
+              }
+
+
             default:
                 return state;
     }
