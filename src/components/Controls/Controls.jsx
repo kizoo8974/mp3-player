@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import RepeatIcon from "@mui/icons-material/Repeat";
 import RepeatOneIcon from "@mui/icons-material/RepeatOne";
 import PauseIcon from "@mui/icons-material/Pause";
@@ -52,13 +52,22 @@ const Controls = ({
     changeVolume(event.target.value)
   }
 
-  const onClickPrevious = () => {
-    dispatch(prevMusic())
-  }
+  const onClickPrevious = useCallback(() => {
+    if(repeat === 'ONE') {
+      resetDuration();
+    }else {
+      dispatch(prevMusic())
+    }
+    
+  }, [repeat, resetDuration, dispatch])
 
-  const onClickNext = () => {
+  const onClickNext = useCallback(() => {
+    if(repeat === 'ONE') {
+      resetDuration();
+    }else {
     dispatch(nextMusic())
-  }
+    }
+  },[repeat, resetDuration, dispatch])
 
   const onClickRepeat = () => {
     dispatch(setRepeat())
