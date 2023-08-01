@@ -13,6 +13,20 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { nextMusic, prevMusic } from "../../store/musicPlayerReducer";
 
+const RepeatButton = ({repeat, ...props}) => {
+  switch (repeat) {
+    case 'ALL' :
+    return <RepeatIcon sx={{ fontSize: 30, cursor: "pointer" }} {...props}/>;
+    case 'ONE':
+    return <RepeatOneIcon sx={{ fontSize: 30, cursor: "pointer" }} {...props}/>;
+    case 'SHUFFLE':
+    return <ShuffleIcon sx={{ fontSize: 30, cursor: "pointer" }} {...props}/>;
+
+    default:
+      return null;
+  }
+}
+
 const Controls = ({
   showMusicList,
   setShowMusicList,
@@ -23,6 +37,7 @@ const Controls = ({
 }) => {
 
   const playing =  useSelector((state)=> state.playing);
+  const repeat =  useSelector((state)=> state.repeat);
   const dispatch = useDispatch()
 
   const onClickPlay = () => {
@@ -45,13 +60,17 @@ const Controls = ({
     dispatch(nextMusic())
   }
 
+  const onClickRepeat = () => {
+    dispatch(setRepeat())
+  }
+
   return (
     <div className="control-area">
       <QueueMusic
         sx={{ fontSize: 30, cursor: "pointer" }}
     
       />
-      <RepeatIcon sx={{ fontSize: 30, cursor: "pointer" }} />
+      <RepeatButton repeat={repeat} onClick={onClickRepeat}/>
       <SkipPrevious
         sx={{ fontSize: 30, cursor: "pointer" }}
         onClick={onClickPrevious}
